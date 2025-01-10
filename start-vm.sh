@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export IMG=fedora-coreos-41.aarch64.raw
+export IMG=fedora-coreos-41.20241215.3.0-applehv.aarch64.raw
 export CFG_FOLDER=/Users/cmoullia/code/_temp/vfkit/dev
 
 vfkit \

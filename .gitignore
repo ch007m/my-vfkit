@@ -1,0 +1,4 @@
+# Fedora raw image
+fedora-coreos-*
+dev/*.bu
+dev/*.ign
