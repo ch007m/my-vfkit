@@ -1,6 +1,10 @@
 # Commands to be used to create a VM on macos
 
-See documentation:
+See documentation: https://github.com/crc-org/vfkit
+
+Download under `dev` folder a Fedora CoreOS raw image and execute the script
+
+**Note**: change the mac address
 
 ```bash
 ./[start-vm.sh](start-vm.sh)
