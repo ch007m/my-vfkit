@@ -19,5 +19,5 @@ vfkit \
 --device virtio-vsock,port=1025,socketURL=$CFG_FOLDER/default.sock,listen \
 --device virtio-serial,logFilePath=$CFG_FOLDER/default.log \
 --device virtio-gpu,width=800,height=600 \
---device virtio-fs,sharedDir=/var/folders,mountTag=a0bb3a2c8b0b02ba5958b0576f0d6530e104 \
+--device virtio-fs,sharedDir=/var/folders,mountTag=var-folders \
 --gui
