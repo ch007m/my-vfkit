@@ -67,15 +67,11 @@ vfkit \
 --device virtio-vsock,port=1025,socketURL=$CFG_FOLDER/default.sock,listen \
 --device virtio-serial,logFilePath=$CFG_FOLDER/default.log \
 --device virtio-gpu,width=800,height=600 \
---device virtio-fs,sharedDir=<<YOUR_PATH>>,mountTag=<<MOUNT_NAME>> \
 --gui
 ```
 
-You can mount different folders as documented here: https://github.com/crc-org/vfkit/blob/main/doc/usage.md#file-sharing
-
 To ssh, get the IP address of the VM from the GUI screen and pass the path of your private key
 ```bash
-
 ssh -i ~/.ssh/id_rsa user1@192.168.64.4
 Fedora CoreOS 41.20241215.3.0
 Tracker: https://github.com/coreos/fedora-coreos-tracker
@@ -83,4 +79,20 @@ Discuss: https://discussion.fedoraproject.org/tag/coreos
 
 Last login: Fri Jan 10 13:14:45 2025 from 192.168.64.1
 user1@localhost:~$ 
+```
+
+You can mount different folders as documented here: https://github.com/crc-org/vfkit/blob/main/doc/usage.md#file-sharing
+Add a new line to your config
+```aiignore
+--device virtio-fs,sharedDir=<<YOUR_PATH>>,mountTag=<<MOUNT_NAME>> \
+```
+and sssh to mount the dir
+```bash
+ssh -i ~/.ssh/id_rsa user1@192.168.64.4
+user1@localhost:~$ pwd
+/home/user1
+
+mkdir /home/user1/dir
+sudo mount -t virtiofs <<MOUNT_NAME>> /home/user1/<<TARGET_DIR>>
+ls -la /home/user1/<<TARGET_DIR>>
 ```
