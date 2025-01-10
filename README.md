@@ -18,11 +18,13 @@ version: 1.1.0
 passwd:
   users:
     - name: user1
+      # 
+      # Get your Public key and append it to the following field
+      #
       ssh_authorized_keys:
-      - <<ADD_HERE THE CONTENT OF YOUR PUBLIC KEY STRING>
+      - <<ADD_HERE THE CONTENT OF YOUR PUBLIC KEY STRING>>
       #
       # Generate the hash password using this command: podman run -ti --rm quay.io/coreos/mkpasswd --method=yescrypt
-      # password is: user1
       #
       password_hash: <<GENERATED_PASSWORD>>
       home_dir: /home/user1
@@ -30,7 +32,7 @@ passwd:
       groups:
         - wheel
       shell: /bin/bash
-EOF      
+EOF
 ```
 
 and convert it to an ignition json file using `butane` tool
