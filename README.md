@@ -18,9 +18,11 @@ passwd:
     - name: user1
       ssh_authorized_keys:
       - <<ADD_HERE THE CONTENT OF YOUR PUBLIC KEY STRING>
+      #
       # Generate the hash password using this command: podman run -ti --rm quay.io/coreos/mkpasswd --method=yescrypt
       # password is: user1
-      password_hash: $y$j9T$CVfMT5IaUpnmZoaY0FF4N1$QsmSZZLqp0h1hvA48RjfsG1qRxEdu1PqUgiuSyNFRcA
+      #
+      password_hash: <<GENERATED_PASSWORD>>
       home_dir: /home/user1
       no_create_home: false
       groups:
