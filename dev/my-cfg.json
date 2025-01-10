@@ -1,0 +1,13 @@
+{
+  "ignition": {
+    "version": "3.0.0"
+  },
+  "passwd": {
+    "users": [
+      {
+        "name": "developer",
+        "passwordHash": "$1$Mu/uI6na$.QjDh.uRm8bfFAchUeENU."
+      }
+    ]
+  }
+}
