@@ -8,7 +8,7 @@ and extract it locally.
 
 Change the mac address (the one of the eth interface) within the bash script to use yours and point to a local temp folder where log, ignition or butane config files will be stored
 
-Create a butane config file 
+Create a butane config file to create a user and import your public key (to ssh). See hereafter what you should do !
 ```bash
 cat <<EOF > dev/my-cfg.bu
 variant: fcos
@@ -35,6 +35,7 @@ and convert it to an ignition json file using `butane` tool
 
 ```bash
 export CFG_FOLDER=/Users/cmoullia/code/_temp/vfkit/dev
+
 podman run --rm \
   -v $CFG_FOLDER/:/files \
   quay.io/coreos/butane:release \
@@ -44,9 +45,9 @@ podman run --rm \
 cp transpiled_config.ign $CFG_FOLDER/my-cfg.ign  
 ```
 
-Create now VM
+Create now the VM
 ```bash
-export IMG=fedora-coreos-41.aarch64.raw
+export IMG=fedora-coreos-41.20241215.3.0-applehv.aarch64.raw
 
 vfkit \
 --cpus 2 \
@@ -57,7 +58,7 @@ vfkit \
 --device virtio-blk,path=$IMG \
 --device virtio-input,keyboard \
 --device virtio-input,pointing \
---device virtio-net,nat,mac=5a:94:ef:e4:0c:ee \
+--device virtio-net,nat,mac=<<YOUr_MAC_ADDRESS>> \
 --device rosetta,mountTag=rosetta,install \
 --restful-uri tcp://localhost:60195 \
 --device virtio-rng \
