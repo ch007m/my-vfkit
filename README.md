@@ -5,7 +5,7 @@
 
 ## How to guide
 
-Download the Fedora CoreOS AppleHV image: https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/41.20241215.3.0/aarch64/fedora-coreos-41.20241215.3.0-applehv.aarch64.raw.gz
+Download a Fedora CoreOS AppleHV image: https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/41.20241215.3.0/aarch64/fedora-coreos-41.20241215.3.0-applehv.aarch64.raw.gz
 and extract it locally.
 
 Change the mac address (the one of the eth interface) within the bash script to use yours and point to a local temp folder where log, ignition or butane config files will be stored
