@@ -1,7 +1,7 @@
 ## How to create a Fedora VM on a mac machine using vfkit
 
-See documentation: https://github.com/crc-org/vfkit
-For butane tool: https://coreos.github.io/butane/
+- See documentation: https://github.com/crc-org/vfkit
+- For butane tool: https://coreos.github.io/butane/
 
 Download the Fedora CoreOS AppleHV image: https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/41.20241215.3.0/aarch64/fedora-coreos-41.20241215.3.0-applehv.aarch64.raw.gz
 and extract it locally.
