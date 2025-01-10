@@ -8,7 +8,7 @@
 Download a Fedora CoreOS AppleHV image (example: https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/41.20241215.3.0/aarch64/fedora-coreos-41.20241215.3.0-applehv.aarch64.raw.gz)
 and extract it locally.
 
-Change the mac address (the one of your eth interface) to configure the [network interface](https://github.com/crc-org/vfkit/blob/main/doc/usage.md#networking) to access it from your machine
+Change the mac address (the one of your eth or bridge interface) to configure the [network interface](https://github.com/crc-org/vfkit/blob/main/doc/usage.md#networking) to access it from your machine
 and update the bash script to use yours and point to a local temp folder where log, ignition or butane config files will be stored
 
 Create a butane config file to create a user and import your public key (to ssh). See hereafter what you should do !
