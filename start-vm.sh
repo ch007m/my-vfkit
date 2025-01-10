@@ -5,7 +5,7 @@ export IMG=fedora-coreos-41.aarch64.raw
 vfkit \
 --cpus 2 \
 --memory 2048 \
---ignition dev/my-cfg.json \
+--ignition /Users/cmoullia/code/_temp/vfkit/dev/my-cfg.json \
 --bootloader efi,variable-store=dev/efi-variable-store,create \
 --device virtio-blk,path=$IMG \
 --device virtio-input,keyboard \

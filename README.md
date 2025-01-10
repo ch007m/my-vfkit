@@ -1,6 +1,7 @@
 # Commands to be used to create a VM on macos
 
 See documentation: https://github.com/crc-org/vfkit
+For butane tool: https://coreos.github.io/butane/
 
 Download under `dev` folder a Fedora CoreOS raw image and execute the script
 
@@ -10,9 +11,15 @@ Download under `dev` folder a Fedora CoreOS raw image and execute the script
 ./start-vm.sh
 ```
 
-To ssh:
+## Converting the YAML config file to ignition json
+
 ```bash
-DEBU[0000] Executing: ssh [-i /Users/cmoullia/.local/share/containers/podman/machine/machine -p 60188 core@localhost -o IdentitiesOnly=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o CheckHostIP=no -o LogLevel=ERROR -o SetEnv=LC_ALL= -t]
+podman run --rm \
+  -v /Users/cmoullia/code/_temp/vfkit/dev/:/files \
+  quay.io/coreos/butane:release \
+  --pretty \
+  --strict \
+  /files/my-cfg.bu > transpiled_config.ign
 ```
 
 podman command executed to start the VM on macos
