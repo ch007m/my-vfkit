@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    runs-on: self-hosted, dabou-macos14, macOS, ARM64
+    runs-on: self-hosted, dabou-macos, macOS, ARM64
     steps:
       - name: Run a command
         run: |
