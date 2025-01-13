@@ -13,8 +13,5 @@ jobs:
       - name: Run a command
         run: |
           echo "Self-hosted runner is working!"
-          echo "OS Release information ..."
-          cat /etc/redhat-release
-          # yamllint disable-line rule:trailing-spaces
           echo "OS and arch ..."
           uname -a
