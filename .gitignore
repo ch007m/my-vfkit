@@ -1,4 +1,5 @@
 # Fedora raw image
 fedora-coreos-*
+actions-runner
 dev/*.bu
 dev/*.ign
