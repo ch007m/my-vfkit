@@ -5,7 +5,7 @@ export CFG_FOLDER=/Users/cmoullia/code/_temp/vfkit/dev
 
 vfkit \
 --cpus 2 \
---memory 2048 \
+--memory 4096 \
 --log-level debug \
 --ignition $CFG_FOLDER/my-cfg.ign \
 --bootloader efi,variable-store=$CFG_FOLDER/efi-variable-store,create \

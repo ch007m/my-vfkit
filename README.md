@@ -11,7 +11,7 @@ and extract it locally.
 Change the mac address (the one of your eth or bridge interface) to configure the [network interface](https://github.com/crc-org/vfkit/blob/main/doc/usage.md#networking) to access it from your machine
 and update the bash script to use yours and point to a local temp folder where log, ignition or butane config files will be stored
 
-Create a butane config file to create a user and import your public key (to ssh). See hereafter what you should do !
+Create a butane yaml config file to define a user, its password and import your public key (to ssh). See hereafter what you should do !
 ```bash
 cat <<EOF > dev/my-cfg.bu
 variant: fcos

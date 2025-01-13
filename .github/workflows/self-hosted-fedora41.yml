@@ -1,0 +1,19 @@
+name: Self-Hosted Runner Test
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: self-hosted
+    steps:
+      - name: Run a command
+        run: |
+          echo "Self-hosted runner is working!"
+          echo "OS Release information ..."
+          cat /etc/redhat-release
+          
+          echo "OS and arch ..."
+          uname -a
