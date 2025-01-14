@@ -32,6 +32,7 @@ passwd:
       no_create_home: false
       groups:
         - wheel
+        - sudo
       shell: /bin/bash
 EOF
 ```
