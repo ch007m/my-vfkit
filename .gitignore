@@ -1,5 +1,13 @@
+.DS_Store
+.idea/
+
 # Fedora raw image
 fedora-coreos-*
+Fedora-Cloud-41.raw*
+
 actions-runner
 dev/*.bu
 dev/*.ign
+
+fedora/cloud-init/user-data
+fedora/cloudinit.iso

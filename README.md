@@ -90,7 +90,7 @@ Add a new line to your config
 ```aiignore
 --device virtio-fs,sharedDir=<<YOUR_PATH>>,mountTag=<<MOUNT_NAME>> \
 ```
-and sssh to mount the dir
+and ssh to mount the dir
 ```bash
 ssh -i ~/.ssh/id_rsa user1@192.168.64.4
 user1@localhost:~$ pwd
@@ -100,3 +100,13 @@ mkdir /home/user1/dir
 sudo mount -t virtiofs <<MOUNT_NAME>> /home/user1/<<TARGET_DIR>>
 ls -la /home/user1/<<TARGET_DIR>>
 ```
+
+## Remarks
+
+We can try to create a VM using another raw images like `fedora cloud` but then it is needed to check what they accept: cloud-init vs ignition
+
+| Type          | Config mode | Testing                                                |
+|---------------|-------------|--------------------------------------------------------|
+| Fedora Cloud  | cloud-init  |                                                        |
+| Fedora CoreOS | ignition    | fedora-coreos-41.20241215.3.0-applehv.aarch64.raw      |
+| Fedora Server | ?           | Must be configured when we create the VM the first time |
