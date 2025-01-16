@@ -9,6 +9,8 @@ fi
 CFG_FOLDER=$(pwd)/dev
 IMG_FOLDER=$(pwd)/fedora
 
+rm CFG_FOLDER/*.log
+
 vfkit \
   --cpus 2 \
   --memory 4096 \

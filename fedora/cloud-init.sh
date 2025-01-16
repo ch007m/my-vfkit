@@ -18,12 +18,17 @@ get_host_timezone(){
   fi
 }
 
+gen_password() {
+  podman run -ti --rm quay.io/coreos/mkpasswd --method=yescrypt user1
+}
+
 create_user_data(){
     echo "#### 3. Create user-data file"
     YOUR_SSH_KEY=$(cat ~/.ssh/id_rsa.pub)
     HOST_TIMEZONE=$(get_host_timezone)
     sed "s|SSH_PUBLIC_KEY|${YOUR_SSH_KEY}|g" ${CONFIG_DIR}/cloud-init/user-data.tpl > ${CONFIG_DIR}/cloud-init/user-data.tmp
     sed "s|TIMEZONE|${HOST_TIMEZONE}|g" ${CONFIG_DIR}/cloud-init/user-data.tmp > ${CONFIG_DIR}/cloud-init/user-data
+    sed "s|GENPASSWORD|$(gen_password)|g" ${CONFIG_DIR}/cloud-init/user-data.tmp > ${CONFIG_DIR}/cloud-init/user-data
     rm ${CONFIG_DIR}/cloud-init/user-data.tmp
 }
 
@@ -60,6 +65,3 @@ create_user_data
 gen_iso
 ssh-keygen -R 192.168.64.4
 echo "Done"
-
-ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/.ssh/id_rsa user1@192.168.64.4 "sudo cat /var/log/cloud-init-output.log"
-

@@ -1,8 +1,4 @@
 #cloud-config
-chpasswd:
-  list: |
-    root:user1
-  expire: False
 
 disable_root: false
 package_upgrade: false
@@ -15,7 +11,7 @@ users:
   - name: user1
     gecos: User1 User
     # Password: user1
-    passwd: $y$j9T$oDXijWyyIphUF/uI8/QdU0$ITomDBxgnCxOUb0eYK3qfO1MSZUPFSmHmkL6PHvZ1I6
+    passwd: GENPASSWORD
     lock-passwd: false
     chpasswd: { expire: False }
     sudo: ALL=(ALL) NOPASSWD:ALL
@@ -32,27 +28,38 @@ write_files:
     permissions: '0755'
     content: |
       #!/bin/bash
-      set -x
 
       timedatectl set-timezone TIMEZONE
 
+      echo "export KIND_EXPERIMENTAL_FEATURE=podman" >> /home/user1/.bash_profile
       echo 'alias k=kubectl' | sudo tee /etc/profile.d/alias.sh
+
       mkdir -p /home/user1/.local/bin
+      chown -R user1:user1 /home/user1/.local
 
-      echo 'Installing kind ...' >> /run/install_log.txt
-      curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.26.0/kind-linux-arm64
-      chmod +x ./kind
-      mv ./kind /home/user1/.local/bin/kind
+      echo "Install dev tools needed by brew"
+      sudo dnf group install -y development-tools
 
-      K9S_VERSION=0.32.7
-      wget https://github.com/derailed/k9s/releases/download/v$K9S_VERSION/k9s_linux_arm64.rpm
-      sudo dnf install -y k9s_linux_arm64.rpm
+      echo 'Installing homebrew ...' | sudo tee /run/install_log.txt
+      CI=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/ZhongRuoyu/homebrew-aarch64-linux/HEAD/install.sh)"
 
-      echo "$(hostname -I | cut -d" " -f 1) $HOSTNAME" >> /etc/hosts
+      echo >> /home/user1/.bashrc
+      echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/user1/.bashrc
+      eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
-      sudo dnf install -y jq podman kubectl
-      echo 'Script executed successfully!' >> /run/install_log.txt
+      echo 'Installing brew go from source as we must build it ...' | sudo tee /run/install_log.txt
+      brew install --build-from-source go
+
+      echo 'Installing kind and build it from source as non available for linux aarch64...' | sudo tee /run/install_log.txt
+      brew install --build-from-source kind
+
+      echo 'Installing k9s ...' | sudo tee /run/install_log.txt
+      brew install derailed/k9s/k9s
+
+      echo "$(hostname -I | cut -d" " -f 1) $HOSTNAME" | sudo tee /etc/hosts
+
+      echo 'Script executed successfully!' | sudo tee /run/install_log.txt
 
 runcmd:
-  - [ sh, "/run/scripts/install-script.sh" ]
+  - [ sudo, -u, user1, "/run/scripts/install-script.sh" ]
 
