@@ -6,6 +6,9 @@ package_upgrade: false
 packages:
   - wget
   - git
+  - gcc
+  - go
+  - which
 
 users:
   - name: user1
@@ -44,17 +47,22 @@ write_files:
       CI=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/ZhongRuoyu/homebrew-aarch64-linux/HEAD/install.sh)"
 
       echo >> /home/user1/.bashrc
-      echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/user1/.bashrc
-      eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+      echo 'eval "$($(brew --prefix)/bin/brew shellenv)"' >> /home/user1/.bashrc
+      eval "$($(brew --prefix)/bin/brew shellenv)"
 
-      echo 'Installing brew go from source as we must build it ...' | sudo tee /run/install_log.txt
-      brew install --build-from-source go
+      #echo 'Installing brew go from source as we must build it ...' | sudo tee /run/install_log.txt
+      #brew install --build-from-source go
 
       echo 'Installing kind and build it from source as non available for linux aarch64...' | sudo tee /run/install_log.txt
       brew install --build-from-source kind
 
       echo 'Installing k9s ...' | sudo tee /run/install_log.txt
-      brew install derailed/k9s/k9s
+      brew install --ignore-dependencies derailed/k9s/k9s
+
+      echo 'Installing kubectl ...' | sudo tee /run/install_log.txt
+      # DON'T WORK AS bash, etc tools are needed by go and this is irrelevant to build them
+      # brew install --build-from-source --ignore-dependencies kubernetes-cli
+      sudo dnf install -y kubectl
 
       echo "$(hostname -I | cut -d" " -f 1) $HOSTNAME" | sudo tee /etc/hosts
 
