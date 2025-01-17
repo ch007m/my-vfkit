@@ -101,6 +101,69 @@ sudo mount -t virtiofs <<MOUNT_NAME>> /home/user1/<<TARGET_DIR>>
 ls -la /home/user1/<<TARGET_DIR>>
 ```
 
+## gVisor
+
+See project: https://github.com/containers/gvisor-tap-vsock
+
+```bash
+vfkit --cpus 8 --memory 9536 \
+  --bootloader efi,variable-store=/Users/cmoullia/.local/share/containers/podman/machine/applehv/efi-bl-podman-machine-default,create \
+  --device virtio-blk,path=/Users/cmoullia/.local/share/containers/podman/machine/applehv/podman-machine-default-arm64.raw \
+  --device virtio-rng \
+  --device virtio-serial,logFilePath=/var/folders/28/g86pgjxj0wl1nkd_85c2krjw0000gn/T/podman/podman-machine-default.log \
+  --device rosetta,mountTag=rosetta,install \
+  --device virtio-vsock,port=1025,socketURL=/var/folders/28/g86pgjxj0wl1nkd_85c2krjw0000gn/T/podman/podman-machine-default.sock,listen \
+  --device virtio-net,unixSocketPath=/var/folders/28/g86pgjxj0wl1nkd_85c2krjw0000gn/T/podman/podman-machine-default-gvproxy.sock,mac=5a:94:ef:e4:0c:ee \
+  --device virtio-fs,sharedDir=/Users,mountTag=a2a0ee2c717462feb1de2f5afd59de5fd2d8 \
+  --device virtio-fs,sharedDir=/private,mountTag=71708eb255bc230cd7c91dd26f7667a7b938 \
+  --device virtio-fs,sharedDir=/var/folders,mountTag=a0bb3a2c8b0b02ba5958b0576f0d6530e104 \
+  --restful-uri tcp://localhost:60194 \
+  --device virtio-gpu,width=800,height=600 \
+  --device virtio-input,pointing \
+  --device virtio-input,keyboard \
+  --gui
+
+/opt/podman/bin/gvproxy -debug -mtu 1500 -ssh-port 60188 \
+  -listen-vfkit unixgram:///var/folders/28/g86pgjxj0wl1nkd_85c2krjw0000gn/T/podman/podman-machine-default-gvproxy.sock \
+  -forward-sock /var/folders/28/g86pgjxj0wl1nkd_85c2krjw0000gn/T/podman/podman-machine-default-api.sock \
+  -forward-dest /run/user/501/podman/podman.sock \
+  -forward-user core \
+  -forward-identity /Users/cmoullia/.local/share/containers/podman/machine/machine \
+  -pid-file /var/folders/28/g86pgjxj0wl1nkd_85c2krjw0000gn/T/podman/gvproxy.pid \
+  -log-file /var/folders/28/g86pgjxj0wl1nkd_85c2krjw0000gn/T/podman/gvproxy.log
+```
+
+Do we need such parameters ?
+
+-forward-user user1 \
+-forward-identity /Users/cmoullia/.ssh/id_rsa \
+
+Command tested for vfkit
+```bash
+vfkit parameters
+  --device virtio-vsock,port=1025,socketURL=/Users/cmoullia/code/_temp/vfkit/dev/vsock-1025.sock,listen \
+  --device virtio-net,unixSocketPath=/Users/cmoullia/code/_temp/vfkit/dev/gvproxy.sock,mac=5a:94:ef:e4:0c:ee \
+  
+  #-listen vsock://:1025 \
+  #-listen unix:///Users/cmoullia/code/_temp/vfkit/dev/vfkit-vsock-1025.sock \
+set CONFIG_FOLDER /Users/cmoullia/code/_temp/vfkit/dev
+rm $CONFIG_FOLDER/gvproxy.sock
+gvproxy -debug -mtu 1500 -ssh-port 60188 \
+  -listen-vfkit unixgram://$CONFIG_FOLDER/gvproxy.sock \
+  -pid-file $CONFIG_FOLDER/gvproxy.pid \
+  -log-file $CONFIG_FOLDER/gvproxy.log
+```
+
+To ssh
+```bash
+ssh -i /Users/cmoullia/.ssh/id_rsa -p 60188 \
+  -o IdentitiesOnly=yes \
+  -o StrictHostKeyChecking=no \
+  -o UserKnownHostsFile=/dev/null \
+  -o CheckHostIP=no \
+  user1@localhost
+```
+
 ## Remarks
 
 We can try to create a VM using another raw images like `fedora cloud` but then it is needed to check what they accept: cloud-init vs ignition

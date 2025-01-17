@@ -11,6 +11,7 @@ IMG_FOLDER=$(pwd)/fedora
 
 rm CFG_FOLDER/*.log
 
+#--device virtio-net,nat,mac=5a:94:ef:e4:0c:ee \
 vfkit \
   --cpus 2 \
   --memory 4096 \
@@ -21,11 +22,11 @@ vfkit \
   --device virtio-blk,path=$IMG_FOLDER/cloudinit.iso \
   --device virtio-input,keyboard \
   --device virtio-input,pointing \
-  --device virtio-net,nat,mac=5a:94:ef:e4:0c:ee \
   --device rosetta,mountTag=rosetta,install \
   --restful-uri tcp://localhost:60195 \
   --device virtio-rng \
-  --device virtio-vsock,port=1025,socketURL=$CFG_FOLDER/default.sock,listen \
+  --device virtio-vsock,port=1025,socketURL=/Users/cmoullia/code/_temp/vfkit/dev/vsock-1025.sock,listen \
+  --device virtio-net,unixSocketPath=/Users/cmoullia/code/_temp/vfkit/dev/gvproxy.sock,mac=5a:94:ef:e4:0c:ee \
   --device virtio-serial,logFilePath=$CFG_FOLDER/default.log \
   --device virtio-gpu,width=800,height=600 \
   --device virtio-fs,sharedDir=/Users/cmoullia/code/,mountTag=user1 \

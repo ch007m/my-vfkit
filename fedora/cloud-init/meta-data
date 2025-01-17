@@ -1,9 +1,7 @@
 instance-id: cloud-vm
 local-hostname: cloud-vm
-network:
-  version: 2
-  ethernets:
-    nics:
-      match:
-        name: eth*
-      dhcp4: yes
+#network:
+#  version: 2
+#  ethernets:
+#    eno1:
+#      dhcp4: true

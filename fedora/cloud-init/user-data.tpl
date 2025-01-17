@@ -34,9 +34,6 @@ write_files:
 
       timedatectl set-timezone TIMEZONE
 
-      echo "export KIND_EXPERIMENTAL_FEATURE=podman" >> /home/user1/.bash_profile
-      echo 'alias k=kubectl' | sudo tee /etc/profile.d/alias.sh
-
       mkdir -p /home/user1/.local/bin
       chown -R user1:user1 /home/user1/.local
 
@@ -55,6 +52,7 @@ write_files:
 
       echo 'Installing kind and build it from source as non available for linux aarch64...' | sudo tee /run/install_log.txt
       brew install --build-from-source kind
+      echo "export KIND_EXPERIMENTAL_FEATURE=podman" >> /home/user1/.bash_profile
 
       echo 'Installing k9s ...' | sudo tee /run/install_log.txt
       brew install derailed/k9s/k9s
@@ -64,6 +62,7 @@ write_files:
       # this is irrelevant to build them
       # brew install --build-from-source --ignore-dependencies kubernetes-cli
       sudo dnf install -y kubectl
+      echo 'alias k=kubectl' | sudo tee /etc/profile.d/alias.sh
 
       echo "$(hostname -I | cut -d" " -f 1) $HOSTNAME" | sudo tee /etc/hosts
 
