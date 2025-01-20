@@ -103,9 +103,12 @@ ls -la /home/user1/<<TARGET_DIR>>
 
 ## gVisor
 
+Alternatively, we could also like the podman project do use gVisor but, then it will be needed to launch 2 processes: vfkit and gvisor !
+
 See project: https://github.com/containers/gvisor-tap-vsock
 
 ```bash
+// Processes lanched using: podman machine start
 vfkit --cpus 8 --memory 9536 \
   --bootloader efi,variable-store=/Users/cmoullia/.local/share/containers/podman/machine/applehv/efi-bl-podman-machine-default,create \
   --device virtio-blk,path=/Users/cmoullia/.local/share/containers/podman/machine/applehv/podman-machine-default-arm64.raw \
