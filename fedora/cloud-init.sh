@@ -7,6 +7,7 @@ FEDORA_VERSION=41
 
 CONFIG_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PWD_DIR=$(pwd)
+IMG_DIR=$(pwd)/fedora
 
 get_host_timezone(){
   if [[ "$OSTYPE" == "linux-gnu" ]]; then
@@ -55,7 +56,7 @@ create_user_data(){
 ##
 gen_iso(){
     echo "#### 4. Generate ISO file containing user-data, meta-data files and used by cloud-init at bootstrap"
-    mkisofs -output cloudinit.iso -volid cidata -joliet -r ${CONFIG_DIR}/cloud-init/meta-data ${CONFIG_DIR}/cloud-init/user-data
+    mkisofs -output $IMG_DIR/cloudinit.iso -volid cidata -joliet -r ${CONFIG_DIR}/cloud-init/meta-data ${CONFIG_DIR}/cloud-init/user-data
 }
 
 ##
