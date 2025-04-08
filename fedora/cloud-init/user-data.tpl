@@ -9,6 +9,9 @@ packages:
   - gcc
   - go
   - which
+  - java
+  - maven
+  - jq
 
 users:
   - name: user1
