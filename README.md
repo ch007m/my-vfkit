@@ -75,6 +75,22 @@ vfkit \
 --device virtio-gpu,width=800,height=600 \
 --gui
 ```
+or use the bash script:
+```shell
+touch .env
+echo "RAW_FEDORA_FILE=Fedora-Cloud-41.raww
+VM_MEMORY=40966
+CPU=22
+" > .env
+dotenv -x .env
+
+./start-vm.sh
+
+where: 
+- <RAW_FEDORA_FILE>: Fedora-Cloud-41.raw
+- <VM_MEMORY>: 4096
+- <VM_CPU>: 2
+```
 
 To ssh, get the IP address of the VM from the GUI screen and pass the path of your private key
 ```bash

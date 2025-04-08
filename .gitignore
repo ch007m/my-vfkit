@@ -11,3 +11,4 @@ dev/*.ign
 
 fedora/cloud-init/user-data
 fedora/cloudinit.iso
+/.env

@@ -1,9 +1,21 @@
 #!/usr/bin/env bash
 
-if [[ -z "$IMG" ]]; then
-    IMG="$1"
+if [[ -n "$RAW_FEDORA_FILE" ]]; then
+    IMG="$RAW_FEDORA_FILE"
 else
     IMG="Fedora-Cloud-41.raw"
+fi
+
+if [[ -n "$VM_MEMORY" ]]; then
+    MEMORY="$VM_MEMORY"
+else
+    MEMORY="4096" # 6144
+fi
+
+if [[ -n "$VM_CPU" ]]; then
+    CPU="$VM_CPU"
+else
+    CPU="2" # 6144
 fi
 
 CFG_FOLDER=$(pwd)/dev
@@ -20,8 +32,8 @@ rm CFG_FOLDER/*.log
 #--device virtio-vsock,port=1025,socketURL=$CFG_FOLDER/default.sock,listen \
 
 vfkit \
-  --cpus 2 \
-  --memory 6144 \
+  --cpus $CPU \
+  --memory $MEMORY \
   --log-level debug \
   --ignition $CFG_FOLDER/my-cfg.ign \
   --bootloader efi,variable-store=$CFG_FOLDER/efi-variable-store,create \
