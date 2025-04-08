@@ -18,9 +18,10 @@ rm CFG_FOLDER/*.log
 # NAT & Mac address
 #--device virtio-net,nat,mac=5a:94:ef:e4:0c:ee \
 #--device virtio-vsock,port=1025,socketURL=$CFG_FOLDER/default.sock,listen \
+
 vfkit \
   --cpus 2 \
-  --memory 4096 \
+  --memory 6144 \
   --log-level debug \
   --ignition $CFG_FOLDER/my-cfg.ign \
   --bootloader efi,variable-store=$CFG_FOLDER/efi-variable-store,create \
