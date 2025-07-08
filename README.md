@@ -283,13 +283,13 @@ dev@localhost:~$
 To ssh to the VM using `localhost` and without the need to be worry about the IP address assigned to the VM, it is needed to use the [gVisor](https://github.com/containers/gvisor-tap-vsock) tool, acting as proxy and been able `dynamically port forward` the packets.
 
 If you have installed podman, then the tool is already installed, otherwise install it using the latest release: https://github.com/containers/gvisor-tap-vsock/releases
-Execute the following command where you define the `ssh-port` where thz traffi will be forwarded. Take care also to pass the user `dev` and your private key to the `gvproxy` command
+Execute the following command where you define the `ssh-port` where the traffic will be forwarded. Take care also to pass the user `dev` and your private key to the `gvproxy` command
 
 ```bash
 set VIRT_FOLDER path/to/_virt
 rm $VIRT_FOLDER/gvproxy.sock
 
-gvproxy -mtu 1500 -ssh-port 60188 \
+gvproxy -debug -mtu 1500 -ssh-port 60188 \
   -listen-vfkit unixgram://$VIRT_FOLDER/gvproxy.sock \
   -forward-dest /run/user/501/podman/podman.sock \
   -forward-user dev \
@@ -303,7 +303,11 @@ Next, review the parameters of the previous `vfkit` command used and change the 
 ```txt
  --device virtio-net,unixSocketPath=$VIRT_FOLDER/gvproxy.sock,mac=5a:94:ef:e4:0c:ee \
 ```
-
+Such a mac address will be used by the gvproxy tool to send packets
+```shell
+I0708 15:52:11.490427   92298 sniffer.go:241] send arp 192.168.127.1 (5a:94:ef:e4:0c:dd) -> 192.168.127.2 (00:00:00:00:00:00) valid:true
+...
+```
 Execute this command to create the VM
 ```shell
 vfkit \

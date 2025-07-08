@@ -12,6 +12,7 @@ packages:
   - java
   - maven
   - jq
+  - net-tools
 
 users:
   - name: dev
