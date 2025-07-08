@@ -1,6 +1,6 @@
 # How to create a Fedora VM on a mac machine using vfkit
 
-The purpose of this project is to help you to create a VM using either a Fedora CoreOS or Cloud image on your Mac machine with the help of the [vfkit](https://github.com/crc-org/vfkit) command-line tool able to communicate with the [macOS Virtualization framework](https://developer.apple.com/documentation/virtualization).
+The purpose of this project is to help you to create a VM using either a Fedora Cloud image (or CoreOS) on your Mac machine with the help of the [vfkit](https://github.com/crc-org/vfkit) command-line tool able to communicate with the [macOS Virtualization framework](https://developer.apple.com/documentation/virtualization).
 
 Install first the latest release of the tool (>= 0.6.1)
 ```shell
@@ -169,8 +169,8 @@ drwxr-xr-x  9 dev dev   288 Feb  6 16:39 cncf
 
 ## CoreOS image
 
-**NOTE**: There is a limitation using the CoreOS image as by nature the `bootc system` is configured to be read-only, and it will not be possible to install packages using dnf. 
-We can nevertheless install some packages using `sudo rpm-ostree install` or by running a container !
+**NOTE**: There is a limitation using the CoreOS image as by nature the `bootc system` is configured to be read-only, and by consequence it will not be possible to install packages using dnf. 
+We can nevertheless install some packages using the command `sudo rpm-ostree install` but a reboot of the VM is needed or as an alternative you can run within the VM a container !
 
 Download a Fedora CoreOS AppleHV image from the Fedora project: https://fedoraproject.org/coreos/download?stream=stable#baremetal and extract it locally.
 
