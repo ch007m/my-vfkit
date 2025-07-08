@@ -13,7 +13,9 @@ and download the Cloud image (or CoreOS) as documented hereafter
 Download the compressed file matching your ARCH (x86 or ARM) and flavor `Fedora Cloud Base xx Raw` from the Fedora website: https://fedoraproject.org/cloud/download. 
 
 Create next a cloud-init configuration file. An example of a configuration file is available as example and template here: `./fedora/cloud-init/user-data.tpl`
-and can be customized. A typical use case will be to create using the tag [write_files](https://docs.cloud-init.io/en/latest/reference/yaml_examples/write_files.html) a file that cloud-init will execute post VM created in order to install your favorite tools, packages:
+and can be customized. 
+
+A typical use case will be to create using the tag [write_files](https://docs.cloud-init.io/en/latest/reference/yaml_examples/write_files.html) a file that cloud-init will execute post VM created in order to install your favorite tools, packages:
 
 ```txt
 write_files:
@@ -58,8 +60,6 @@ write_files:
 runcmd:
   - [ sudo, -u, dev, "/run/scripts/install-script.sh" ]
 ```
-
-
 
 Open a terminal and execute the following script to:
 - Fetch (optional) and decompress the Fedora image, 
