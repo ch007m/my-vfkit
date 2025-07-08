@@ -297,10 +297,15 @@ ssh -i /Users/cmoullia/.ssh/id_rsa -p 60188 \
   user1@localhost
 ```
 
-# gVisor and sock config
-#  --device virtio-vsock,port=1025,socketURL=/Users/cmoullia/code/_temp/vfkit/dev/vsock-1025.sock,listen \
-#  --device virtio-net,unixSocketPath=/Users/cmoullia/code/_temp/vfkit/dev/gvproxy.sock,mac=5a:94:ef:e4:0c:ee \
+### TO park
 
-# NAT & Mac address
-#--device virtio-net,nat,mac=5a:94:ef:e4:0c:ee \
-#--device virtio-vsock,port=1025,socketURL=$CFG_FOLDER/default.sock,listen \
+- gVisor and sock config
+```shell
+--device virtio-vsock,port=1025,socketURL=/Users/cmoullia/code/_temp/vfkit/dev/vsock-1025.sock,listen \
+--device virtio-net,unixSocketPath=/Users/cmoullia/code/_temp/vfkit/dev/gvproxy.sock,mac=5a:94:ef:e4:0c:ee \
+```
+- NAT & Mac address
+```shell
+--device virtio-net,nat,mac=5a:94:ef:e4:0c:ee \
+--device virtio-vsock,port=1025,socketURL=$CFG_FOLDER/default.sock,listen \
+```
