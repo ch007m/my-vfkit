@@ -9,13 +9,16 @@ FEDORA_VERSION=42
 EXEC_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 FEDORA_DIR=$EXEC_DIR/../fedora
 
+OSTYPE=$(uname)
+
 get_host_timezone(){
-  if [[ "$OSTYPE" == "linux-gnu" ]]; then
+  if [[ "$OSTYPE" == "linux" ]]; then
     echo "$(cat /etc/timezone)"
-  elif [[ "$OSTYPE" == "darwin"* ]]; then
-    echo -e "from time import gmtime, strftime\nprint(strftime('%Z', gmtime()))" | python
+  elif [[ "$OSTYPE" == "Darwin" ]]; then
+    #echo -e "from time import gmtime, strftime\nprint(strftime('%Z', gmtime()))" | python
+    echo $(readlink /etc/localtime | awk -F/ '{print $(NF-1) "/" $NF}')
   else # just return UTC since we don't know how to extract the host timezone
-     echo "UTC"
+    echo "UTC"
   fi
 }
 
@@ -51,10 +54,8 @@ decompress() {
 create_user_data(){
     echo "#### 3. Create the user-data file"
     YOUR_SSH_KEY=$(cat ~/.ssh/id_rsa.pub)
-    HOST_TIMEZONE=$(get_host_timezone)
     sed "s|SSH_PUBLIC_KEY|${YOUR_SSH_KEY}|g" ${FEDORA_DIR}/cloud-init/user-data.tpl > ${FEDORA_DIR}/cloud-init/user-data.tmp
-    sed "s|TIMEZONE|${HOST_TIMEZONE}|g" ${FEDORA_DIR}/cloud-init/user-data.tmp > ${FEDORA_DIR}/cloud-init/user-data
-    sed "s|GENPASSWORD|$(gen_password)|g" ${FEDORA_DIR}/cloud-init/user-data.tmp > ${FEDORA_DIR}/cloud-init/user-data
+    sed -e "s|TIME_ZONE|$(get_host_timezone)|g" -e "s|GENPASSWORD|$(gen_password)|g" ${FEDORA_DIR}/cloud-init/user-data.tmp > ${FEDORA_DIR}/cloud-init/user-data
     rm ${FEDORA_DIR}/cloud-init/user-data.tmp
 }
 

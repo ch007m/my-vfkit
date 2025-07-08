@@ -70,7 +70,6 @@ Open a terminal and execute the following script to:
 ```bash
 ./script/cloud-init.sh fetch
 ```
-**NOTE**: Python3 is required to execute the bash script !
 
 To access the VM from your local machine, we have to configure the vfkit device parameter `--device virtio-net,nat,mac` to specify the mac address of the eth or bridge interface to be used. 
 

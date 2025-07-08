@@ -35,7 +35,7 @@ write_files:
     content: |
       #!/bin/bash
 
-      timedatectl set-timezone TIMEZONE
+      sudo timedatectl set-timezone TIME_ZONE
 
       mkdir -p /home/dev/.local/bin
       chown -R dev:dev /home/dev/.local
