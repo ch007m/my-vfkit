@@ -119,7 +119,7 @@ drwxr-xr-x  9 dev dev   288 Feb  6 16:39 cncf
 
 ## CoreOS image
 
-TODO: To be reviewed as instructions were not working anymore using Fedora 42 !!
+TODO: To be reviewed as VM fails to boot using Fedora 42 CoreOS ! Error: EFI_RNG_PROTOCOL unavailable
 
 Download a Fedora CoreOS AppleHV image from the Fedora project: https://fedoraproject.org/coreos/download?stream=stable#baremetal and extract it locally.
 
