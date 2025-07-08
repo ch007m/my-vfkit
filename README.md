@@ -205,8 +205,12 @@ vfkit \
 --device virtio-gpu,width=800,height=600 \
 --gui
 ```
-The GUI will start and then follow the instructions to customize your Mac environment: country/region, language, account, etc
-To ssh enable the `Remote Login`
+The GUI will start and then follow the instructions to customize your Mac environment: country/region, language, user account & password, etc
+To ssh enable the `Remote Login` as documented https://osxdaily.com/2022/07/08/turn-on-ssh-mac/ and next you ssh
+```shell
+ssh <mac_account>@<IP>
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null dabou@192.168.64.5
+```
 
 ## CoreOS image
 
