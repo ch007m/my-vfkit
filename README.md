@@ -119,7 +119,8 @@ drwxr-xr-x  9 dev dev   288 Feb  6 16:39 cncf
 
 ## CoreOS image
 
-TODO: To be reviewed as VM fails to boot using Fedora 42 CoreOS ! Error: EFI_RNG_PROTOCOL unavailable
+**NOTE**: There is a limitation using the CoreOS image as by nature the `bootc system` is configured to be read-only, and it will not be possible to install packages using dnf. 
+We can nevertheless install some packages using `sudo rpm-ostree install` or by running a container !
 
 Download a Fedora CoreOS AppleHV image from the Fedora project: https://fedoraproject.org/coreos/download?stream=stable#baremetal and extract it locally.
 
@@ -205,10 +206,11 @@ MAC_ADDRESS=<YOUR_INTERFACE_MAC_ADDRESS>
 " > .env
 dotenv -x .env
 
-./start-vm.sh 
+./script/start-vm.sh 
 
 where: 
-- <RAW_COREOS_FEDORA_FILE>: Fedora CoreOS raw image for applehv & aarch64
+- <RAW_FEDORA_FILE>: Fedora CoreOS raw image for applehv & aarch64
+- <IGNITION>: true
 - <VM_MEMORY>: 4096
 - <VM_CPU>: 2
 - <MAC_ADRESS>: 
@@ -217,7 +219,7 @@ where:
 
 To ssh, get the IP address of the VM from the GUI screen and pass your private key
 ```bash
-ssh -i ~/.ssh/id_rsa dev@192.168.64.4
+ssh -i ~/.ssh/id_rsa dev@192.168.64.5
 Fedora CoreOS 41.20241215.3.0
 Tracker: https://github.com/coreos/fedora-coreos-tracker
 Discuss: https://discussion.fedoraproject.org/tag/coreos

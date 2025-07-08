@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+if [[ -n "$IGNITION" ]]; then
+    IGNITION="true"
+    CLOUD_INIT=""
+else
+    IGNITION=""
+    CLOUD_INIT="true"
+fi
+
 if [[ -n "$RAW_FEDORA_FILE" ]]; then
     IMG="$RAW_FEDORA_FILE"
 else
@@ -33,9 +41,6 @@ VIRT_FOLDER=$(pwd)/_virt
 IMG_FOLDER=$(pwd)/fedora
 
 rm $VIRT_FOLDER/*.log
-
-IGNITION="" # This flag will be ignored
-CLOUD_INIT="true"
 
 vfkit \
   --cpus $CPU \
