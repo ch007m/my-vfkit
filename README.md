@@ -72,7 +72,8 @@ When you have finished to review and update the template file, execute the follo
 ./script/cloud-init.sh fetch
 ```
 
-When done, the folder `fedora/cloud-init/` will contain the generated `user-data` file and the image downloaded and uncompressed will be vailable under `./fedora/Fedora-cloud-<VERSION>.raw`
+When done, the folder `fedora/cloud-init/` will contain the generated `user-data` file and the image downloaded and uncompressed will be vailable under `./fedora/Fedora-cloud-<VERSION>.raw`.
+
 Everything is in place to create using vfkit the VM except that to access the VM from your local machine, we must find the `mac address` of the eth or bridge interface that you plan to use to access the VM. 
 
 You can get the MAC address of the interface within a terminal using the following mac command:
