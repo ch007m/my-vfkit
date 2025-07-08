@@ -121,7 +121,7 @@ ls -la /home/user1/<<TARGET_DIR>>
 
 ## Cloud image and cloud-init
 
-Alternatively, you can use the Fedora cloud image with cloud-init
+Alternatively, you can use a [Fedora cloud image](https://fedoraproject.org/cloud/download) using `cloud-init` to configure it.
 
 An example of such a configuration file has been created under this template: `./fedora/cloud-init/user-data.tpl`
 
