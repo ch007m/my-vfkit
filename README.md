@@ -278,81 +278,57 @@ Last login: Fri Jan 10 13:14:45 2025 from 192.168.64.1
 dev@localhost:~$ 
 ```
 
-## gVisor (deprecated)
+## gVisor
 
-**Warning**: This section has been created to experiment what podman do but has not been finalized as it is too complex to be used as a user can find more easily the IP address assigned to the VM !
+To ssh to the VM using `localhost` and without the need to be worry about the IP address assigned to the VM, it is needed to use the [gVisor](https://github.com/containers/gvisor-tap-vsock) tool, acting as proxy and been able `dynamically port forward` the packets.
 
-To use [gVisor](https://github.com/containers/gvisor-tap-vsock), which is able locally to configure a DNS server and perform dynamic port forwarding, you will have  to launch a 2nd process next to `vfkit`.
+If you have installed podman, then the tool is already installed, otherwise install it using the latest release: https://github.com/containers/gvisor-tap-vsock/releases
+Execute the following command where you define the `ssh-port` where thz traffi will be forwarded. Take care also to pass the user `dev` and your private key to the `gvproxy` command
 
 ```bash
-// Processes lanched using: podman machine start
-vfkit --cpus 8 --memory 9536 \
-  --bootloader efi,variable-store=/Users/cmoullia/.local/share/containers/podman/machine/applehv/efi-bl-podman-machine-default,create \
-  --device virtio-blk,path=/Users/cmoullia/.local/share/containers/podman/machine/applehv/podman-machine-default-arm64.raw \
-  --device virtio-rng \
-  --device virtio-serial,logFilePath=/var/folders/28/g86pgjxj0wl1nkd_85c2krjw0000gn/T/podman/podman-machine-default.log \
-  --device rosetta,mountTag=rosetta,install \
-  --device virtio-vsock,port=1025,socketURL=/var/folders/28/g86pgjxj0wl1nkd_85c2krjw0000gn/T/podman/podman-machine-default.sock,listen \
-  --device virtio-net,unixSocketPath=/var/folders/28/g86pgjxj0wl1nkd_85c2krjw0000gn/T/podman/podman-machine-default-gvproxy.sock,mac=5a:94:ef:e4:0c:ee \
-  --device virtio-fs,sharedDir=/Users,mountTag=a2a0ee2c717462feb1de2f5afd59de5fd2d8 \
-  --device virtio-fs,sharedDir=/private,mountTag=71708eb255bc230cd7c91dd26f7667a7b938 \
-  --device virtio-fs,sharedDir=/var/folders,mountTag=a0bb3a2c8b0b02ba5958b0576f0d6530e104 \
-  --restful-uri tcp://localhost:60194 \
-  --device virtio-gpu,width=800,height=600 \
-  --device virtio-input,pointing \
-  --device virtio-input,keyboard \
-  --gui
+set VIRT_FOLDER path/to/_virt
+rm $VIRT_FOLDER/gvproxy.sock
 
-/opt/podman/bin/gvproxy -debug -mtu 1500 -ssh-port 60188 \
-  -listen-vfkit unixgram:///var/folders/28/g86pgjxj0wl1nkd_85c2krjw0000gn/T/podman/podman-machine-default-gvproxy.sock \
-  -forward-sock /var/folders/28/g86pgjxj0wl1nkd_85c2krjw0000gn/T/podman/podman-machine-default-api.sock \
+gvproxy -mtu 1500 -ssh-port 60188 \
+  -listen-vfkit unixgram://$VIRT_FOLDER/gvproxy.sock \
   -forward-dest /run/user/501/podman/podman.sock \
-  -forward-user core \
-  -forward-identity /Users/cmoullia/.local/share/containers/podman/machine/machine \
-  -pid-file /var/folders/28/g86pgjxj0wl1nkd_85c2krjw0000gn/T/podman/gvproxy.pid \
-  -log-file /var/folders/28/g86pgjxj0wl1nkd_85c2krjw0000gn/T/podman/gvproxy.log
+  -forward-user dev \
+  -forward-identity $HOME/.ssh/id_rsa \
+  -forward-sock $VIRT_FOLDER/vm.sock \
+  -pid-file $VIRT_FOLDER/gvproxy.pid \
+  -log-file $VIRT_FOLDER/gvproxy.log
 ```
 
-Do we need such parameters ?
-
--forward-user user1 \
--forward-identity /Users/cmoullia/.ssh/id_rsa \
-
-Command tested for vfkit
-```bash
-vfkit parameters
-  --device virtio-vsock,port=1025,socketURL=/Users/cmoullia/code/_temp/vfkit/dev/vsock-1025.sock,listen \
-  --device virtio-net,unixSocketPath=/Users/cmoullia/code/_temp/vfkit/dev/gvproxy.sock,mac=5a:94:ef:e4:0c:ee \
-  
-  #-listen vsock://:1025 \
-  #-listen unix:///Users/cmoullia/code/_temp/vfkit/dev/vfkit-vsock-1025.sock \
-set CONFIG_FOLDER /Users/cmoullia/code/_temp/vfkit/dev
-rm $CONFIG_FOLDER/gvproxy.sock
-gvproxy -debug -mtu 1500 -ssh-port 60188 \
-  -listen-vfkit unixgram://$CONFIG_FOLDER/gvproxy.sock \
-  -pid-file $CONFIG_FOLDER/gvproxy.pid \
-  -log-file $CONFIG_FOLDER/gvproxy.log
+Next, review the parameters of the previous `vfkit` command used and change the `virtio-net` device to use now a `unixSocketPath` pointing to the `gvproxy.sock` file and use as mac address the one expected `5a:94:ef:e4:0c:ee` by gvproxy for the IP: `192.168.127.2`.
+```txt
+ --device virtio-net,unixSocketPath=$VIRT_FOLDER/gvproxy.sock,mac=5a:94:ef:e4:0c:ee \
 ```
 
-To ssh
-```bash
-ssh -i /Users/cmoullia/.ssh/id_rsa -p 60188 \
-  -o IdentitiesOnly=yes \
-  -o StrictHostKeyChecking=no \
-  -o UserKnownHostsFile=/dev/null \
-  -o CheckHostIP=no \
-  user1@localhost
-```
-
-### To park
-
-- gVisor and sock config
+Execute this command to create the VM
 ```shell
---device virtio-vsock,port=1025,socketURL=/Users/cmoullia/code/_temp/vfkit/dev/vsock-1025.sock,listen \
---device virtio-net,unixSocketPath=/Users/cmoullia/code/_temp/vfkit/dev/gvproxy.sock,mac=5a:94:ef:e4:0c:ee \
+vfkit \
+ --cpus 2 \
+ --memory 2048 \
+ --log-level debug \
+ --cloud-init fedora/cloud-init/user-data \
+ --bootloader efi,variable-store=$VIRT_FOLDER/efi-variable-store,create \
+ --device virtio-blk,path=fedora/Fedora-Cloud-42.raw \
+ --device virtio-rng \
+ --device virtio-serial,logFilePath=$VIRT_FOLDER/default.log \
+ --device rosetta,mountTag=rosetta,install \
+ --device virtio-vsock,port=1025,socketURL=$VIRT_FOLDER/default.sock,listen \
+ --device virtio-net,unixSocketPath=$VIRT_FOLDER/gvproxy.sock,mac=5a:94:ef:e4:0c:ee \
+ --restful-uri tcp://localhost:60195 \
+ --device virtio-input,keyboard \
+ --device virtio-input,pointing \
+ --device virtio-gpu,width=800,height=600 \
+ --gui
 ```
-- NAT & Mac address
-```shell
---device virtio-net,nat,mac=5a:94:ef:e4:0c:ee \
---device virtio-vsock,port=1025,socketURL=$CFG_FOLDER/default.sock,listen \
+
+To ssh, use this command and port where traffic is forwarded by gvproxy !
+```bash
+ssh -i /Users/cmoullia/.ssh/id_rsa -p 60188 dev@localhost
+
+Warning: Permanently added '[localhost]:60188' (ED25519) to the list of known hosts.
+Last login: Tue Jul  8 13:29:53 2025 from 192.168.64.1
 ```
