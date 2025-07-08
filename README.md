@@ -280,12 +280,9 @@ dev@localhost:~$
 
 ## gVisor (deprecated)
 
-**Warning**: This section has been created to experiment what podman do but has not been finalized and is too complex to be used as a user can find more easily the IP address assigned to the VM to ssh !
+**Warning**: This section has been created to experiment what podman do but has not been finalized as it is too complex to be used as a user can find more easily the IP address assigned to the VM !
 
-
-Alternatively, we could also like the podman project use gVisor, but it will be needed to launch 2 processes: vfkit and gvisor !
-
-See project: https://github.com/containers/gvisor-tap-vsock
+To use [gVisor](https://github.com/containers/gvisor-tap-vsock), which is able locally to configure a DNS server and perform dynamic port forwarding, you will have  to launch a 2nd process next to `vfkit`.
 
 ```bash
 // Processes lanched using: podman machine start
@@ -347,7 +344,7 @@ ssh -i /Users/cmoullia/.ssh/id_rsa -p 60188 \
   user1@localhost
 ```
 
-### TO park
+### To park
 
 - gVisor and sock config
 ```shell
