@@ -12,10 +12,11 @@ and download the Cloud image (or CoreOS) as documented hereafter
 
 Download the compressed file matching your ARCH (x86 or ARM) and flavor `Fedora Cloud Base xx Raw` from the Fedora website: https://fedoraproject.org/cloud/download. 
 
-Create next a cloud-init configuration file. An example of a configuration file is available as example and template here: `./fedora/cloud-init/user-data.tpl`
-and can be customized. 
+Create next a cloud-init configuration file which includes the username, password, ssh key, etc. An example of such a configuration file is provided part of this project and can be customized: `./fedora/cloud-init/user-data.tpl`
 
-A typical use case will be to create using the tag [write_files](https://docs.cloud-init.io/en/latest/reference/yaml_examples/write_files.html) a file that cloud-init will execute post VM created in order to install your favorite tools, packages:
+You can define part of the section `packages:` the rpm that you would like to install using cloud-init. Nevertheless, when some additional steps are needed, it is then better
+to create using the tag [write_files:](https://docs.cloud-init.io/en/latest/reference/yaml_examples/write_files.html) a bash script that cloud-init will execute post VM created.
+The template of this project includes an example that you can customize as you want ;-)
 
 ```txt
 write_files:
@@ -61,8 +62,8 @@ runcmd:
   - [ sudo, -u, dev, "/run/scripts/install-script.sh" ]
 ```
 
-Open a terminal and execute the following script to:
-- Fetch (optional) and decompress the Fedora image, 
+When you have finished to review and update the template file, execute the following script from a terminal to:
+- Fetch (optional) and decompress the Fedora Cloud image, 
 - Generate the crypted password for the `dev` user,
 - Import your local public key from the `~/.ssh/id_rsa.pub` file,
 - Generate the cloud-init `user-data` file
@@ -71,9 +72,10 @@ Open a terminal and execute the following script to:
 ./script/cloud-init.sh fetch
 ```
 
-To access the VM from your local machine, we have to configure the vfkit device parameter `--device virtio-net,nat,mac` to specify the mac address of the eth or bridge interface to be used. 
+When done, the folder `fedora/cloud-init/` will contain the generated `user-data` file and the image downloaded and uncompressed will be vailable under `./fedora/Fedora-cloud-<VERSION>.raw`
+Everything is in place to create using vfkit the VM except that to access the VM from your local machine, we must find the `mac address` of the eth or bridge interface that you plan to use to access the VM. 
 
-You can get the MAC address of your ethernet interface within a terminal using the following command:
+You can get the MAC address of the interface within a terminal using the following mac command:
 ```shell
 system_profiler SPNetworkDataType -json | jq -r '.SPNetworkDataType[] | select(.interface == "<<ETHERNET_INTERFACE>>") | .Ethernet."MAC Address"'
 ```
@@ -88,7 +90,7 @@ vfkit \
 --log-level debug \
 --cloud-init fedora/cloud-init/user-data \
 --bootloader efi,variable-store=$VIRT_FOLDER/efi-variable-store,create \
---device virtio-blk,path=fedora/Fedora-Cloud-42.raw \
+--device virtio-blk,path=fedora/Fedora-Cloud-<<VERSION>>.raw \
 --device virtio-input,keyboard \
 --device virtio-input,pointing \
 --device virtio-net,nat,mac=<<YOUR_MAC_ADDRESS>> \
@@ -100,12 +102,12 @@ vfkit \
 --device virtio-gpu,width=800,height=600 \
 --gui
 ```
-or use the bash script:
+or use the `start-vm.sh` bash script and set the following variables in an `.env` file:
 ```shell
 touch .env
 echo "RAW_FEDORA_FILE=Fedora-Cloud-42.raw
 VM_MEMORY=4096
-CPU=2
+VM_CPU=2
 MAC_ADDRESS=<YOUR_INTERFACE_MAC_ADDRESS>
 " > .env
 dotenv -x .env
@@ -121,6 +123,8 @@ where:
 ```
 
 To ssh, get the IP address of the VM from the GUI screen (see screenshot) and pass your private key
+
+![vm-ip.png](vm-ip.png)
 
 ```shell
 ssh -i ~/.ssh/id_rsa dev@<VM_IP_ADDRESS>
