@@ -14,9 +14,9 @@ packages:
   - jq
 
 users:
-  - name: user1
-    gecos: User1 User
-    # Password: user1
+  - name: dev
+    gecos: Dev user
+    # Password: dev
     passwd: GENPASSWORD
     lock-passwd: false
     chpasswd: { expire: False }
@@ -37,8 +37,8 @@ write_files:
 
       timedatectl set-timezone TIMEZONE
 
-      mkdir -p /home/user1/.local/bin
-      chown -R user1:user1 /home/user1/.local
+      mkdir -p /home/dev/.local/bin
+      chown -R dev:dev /home/dev/.local
 
       echo "Install dev tools needed by brew"
       sudo dnf group install -y development-tools
@@ -46,8 +46,8 @@ write_files:
       echo 'Installing homebrew ...' | sudo tee /run/install_log.txt
       CI=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/ZhongRuoyu/homebrew-aarch64-linux/HEAD/install.sh)"
 
-      echo >> /home/user1/.bashrc
-      echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/user1/.bashrc
+      echo >> /home/dev/.bashrc
+      echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/dev/.bashrc
       eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
       echo 'Installing brew go from source as we must build it ...' | sudo tee /run/install_log.txt
@@ -55,7 +55,7 @@ write_files:
 
       echo 'Installing kind and build it from source as non available for linux aarch64...' | sudo tee /run/install_log.txt
       brew install --build-from-source kind
-      echo "export KIND_EXPERIMENTAL_FEATURE=podman" >> /home/user1/.bash_profile
+      echo "export KIND_EXPERIMENTAL_FEATURE=podman" >> /home/dev/.bash_profile
 
       echo 'Installing k9s ...' | sudo tee /run/install_log.txt
       brew install derailed/k9s/k9s
@@ -72,5 +72,5 @@ write_files:
       echo 'Script executed successfully!' | sudo tee /run/install_log.txt
 
 runcmd:
-  - [ sudo, -u, user1, "/run/scripts/install-script.sh" ]
+  - [ sudo, -u, dev, "/run/scripts/install-script.sh" ]
 

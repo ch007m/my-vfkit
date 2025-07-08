@@ -5,10 +5,7 @@
 fedora-coreos-*
 Fedora-Cloud-*
 
-actions-runner
-dev/*.bu
-dev/*.ign
-
+_virt
+.env
 fedora/cloud-init/user-data
-fedora/cloudinit.iso
-/.env
+
