@@ -1,6 +1,6 @@
 # How to create a Fedora VM on a mac machine using vfkit
 
-The purpose of this project is to help you to create a VM (using either a Fedora CoreOS or Cloud image) on your Mac machine with the help of the [vfkit](https://github.com/crc-org/vfkit) command-line tool able to communication with the [macOS Virtualization framework](https://developer.apple.com/documentation/virtualization).
+The purpose of this project is to help you to create a VM using either a Fedora CoreOS or Cloud image on your Mac machine with the help of the [vfkit](https://github.com/crc-org/vfkit) command-line tool able to communicate with the [macOS Virtualization framework](https://developer.apple.com/documentation/virtualization).
 
 Install first the latest release of the tool (>= 0.6.1)
 ```shell
