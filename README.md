@@ -167,6 +167,47 @@ drwxr-xr-x  9 dev dev   288 Feb  6 16:39 cncf
 ...
 ```
 
+## MacOS VM
+
+Under active development !!
+
+```shell
+# Execute the following commands from a MacBook machine
+git clone https://github.com/Code-Hex/vz.git && cd vz
+cd example/macOS/
+make build
+
+./virtualization -install
+download restore image in "/Users/cmoullia/VM.bundle/RestoreImage.ipsw"
+download has been completed
+install has been completed
+
+# When done use the following vfkit command
+set IMG /Users/cmoullia/VM.bundle/Disk.img
+set VM_BUNDLE /Users/cmoullia/VM.bundle
+set VIRT_FOLDER _virt
+set MAC_ADDRESS $(system_profiler SPNetworkDataType -json | jq -r '.SPNetworkDataType[] | select(.interface == "en8") | .Ethernet."MAC Address"')
+
+vfkit \
+--cpus 2 \
+--memory 2048 \
+--log-level debug \
+--bootloader macos,machineIdentifierPath=$VM_BUNDLE/MachineIdentifier,hardwareModelPath=$VM_BUNDLE/HardwareModel,auxImagePath=$VM_BUNDLE/AuxiliaryStorage \
+--device virtio-blk,path=$IMG \
+--device virtio-input,keyboard \
+--device virtio-input,pointing \
+--device virtio-net,nat,mac=$MAC_ADDRESS \
+--device rosetta,mountTag=rosetta,install \
+--restful-uri tcp://localhost:60195 \
+--device virtio-rng \
+--device virtio-vsock,port=1025,socketURL=$VIRT_FOLDER/default.sock,listen \
+--device virtio-serial,logFilePath=$VIRT_FOLDER/default.log \
+--device virtio-gpu,width=800,height=600 \
+--gui
+```
+The GUI will start and then follow the instructions to customize your Mac environment: country/region, language, account, etc
+To ssh enable the `Remote Login`
+
 ## CoreOS image
 
 **NOTE**: There is a limitation using the CoreOS image as by nature the `bootc system` is configured to be read-only, and by consequence it will not be possible to install packages using dnf. 
