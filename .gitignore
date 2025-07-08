@@ -3,7 +3,7 @@
 
 # Fedora raw image
 fedora-coreos-*
-Fedora-Cloud-41.raw*
+Fedora-Cloud-*
 
 actions-runner
 dev/*.bu
