@@ -13,7 +13,53 @@ and download the Cloud image (or CoreOS) as documented hereafter
 Download the compressed file matching your ARCH (x86 or ARM) and flavor `Fedora Cloud Base xx Raw` from the Fedora website: https://fedoraproject.org/cloud/download. 
 
 Create next a cloud-init configuration file. An example of a configuration file is available as example and template here: `./fedora/cloud-init/user-data.tpl`
-and can be customized. 
+and can be customized. A typical use case will be to create using the tag [write_files](https://docs.cloud-init.io/en/latest/reference/yaml_examples/write_files.html) a file that cloud-init will execute post VM created in order to install your favorite tools, packages:
+
+```txt
+write_files:
+  - path: /run/scripts/install-script.sh
+    permissions: '0755'
+    content: |
+      #!/bin/bash
+
+      timedatectl set-timezone TIMEZONE
+
+      mkdir -p /home/dev/.local/bin
+      chown -R dev:dev /home/dev/.local
+
+      echo "Install dev tools needed by brew"
+      sudo dnf group install -y development-tools
+
+      echo 'Installing homebrew ...' | sudo tee /run/install_log.txt
+      CI=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/ZhongRuoyu/homebrew-aarch64-linux/HEAD/install.sh)"
+
+      echo >> /home/dev/.bashrc
+      echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/dev/.bashrc
+      eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+      echo 'Installing brew go from source as we must build it ...' | sudo tee /run/install_log.txt
+      brew install --build-from-source go
+
+      echo 'Installing kind and build it from source as non available for linux aarch64...' | sudo tee /run/install_log.txt
+      brew install --build-from-source kind
+      echo "export KIND_EXPERIMENTAL_FEATURE=podman" >> /home/dev/.bash_profile
+
+      echo 'Installing k9s ...' | sudo tee /run/install_log.txt
+      brew install derailed/k9s/k9s
+
+      echo 'Installing kubectl ...' | sudo tee /run/install_log.txt
+      sudo dnf install -y kubectl
+      echo 'alias k=kubectl' | sudo tee /etc/profile.d/alias.sh
+
+      echo "$(hostname -I | cut -d" " -f 1) $HOSTNAME" | sudo tee /etc/hosts
+
+      echo 'Script executed successfully!' | sudo tee /run/install_log.txt
+
+runcmd:
+  - [ sudo, -u, dev, "/run/scripts/install-script.sh" ]
+```
+
+
 
 Open a terminal and execute the following script to:
 - Fetch (optional) and decompress the Fedora image, 
