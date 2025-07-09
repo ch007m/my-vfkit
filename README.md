@@ -1,4 +1,4 @@
-# How to create VM on a mac machine using vfkit
+# How to create a VM on a mac machine using vfkit
 
 The purpose of this project is to help you to create a VM on your Mac machine with the help of the [vfkit](https://github.com/crc-org/vfkit) command-line tool able to communicate with the [macOS Virtualization framework](https://developer.apple.com/documentation/virtualization).
 
