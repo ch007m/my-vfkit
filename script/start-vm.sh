@@ -8,28 +8,29 @@ else
     CLOUD_INIT="true"
 fi
 
-if [[ -n "$RAW_FEDORA_FILE" ]]; then
-    IMG="$RAW_FEDORA_FILE"
+if [[ -n "$IMAGE_PATH" ]]; then
+    IMG="$IMAGE_PATH"
 else
-    IMG="Fedora-Cloud-42.raw"
+   echo "The path to the IMAGE file is mandatory !"
+   exit 1
 fi
 
 if [[ -n "$VM_MEMORY" ]]; then
     MEMORY="$VM_MEMORY"
 else
-    MEMORY="4096" # 6144
+    MEMORY="4096" # 6144, 8192
 fi
 
 if [[ -n "$VM_CPU" ]]; then
     CPU="$VM_CPU"
 else
-    CPU="2" # 6144
+    CPU="2"
 fi
 
 if [[ -n "$MAC_ADDRESS" ]]; then
     MAC_ADDRESS="$MAC_ADDRESS"
 else
-   echo "The MAC_ADDRESS is mandatory !!!"
+   echo "The MAC_ADDRESS is mandatory !"
    exit 1
 fi
 

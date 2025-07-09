@@ -112,7 +112,7 @@ vfkit \
 or use the `start-vm.sh` bash script and set the following variables in an `.env` file:
 ```shell
 touch .env
-echo "RAW_FEDORA_FILE=Fedora-Cloud-42.raw
+echo "IMAGE_PATH=Fedora-Cloud-42.raw
 VM_MEMORY=4096
 VM_CPU=2
 MAC_ADDRESS=<YOUR_INTERFACE_MAC_ADDRESS>
@@ -122,7 +122,7 @@ dotenv -x .env
 ./script/start-vm.sh 
 
 where: 
-- <RAW_FEDORA_FILE>: Fedora raw image
+- <IMAGE_PATH>: Fedora raw image
 - <VM_MEMORY>: Memory size of the VM: 4096
 - <VM_CPU>: Number of cpu: 2
 - <MAC_ADRESS>: The eth mac adddress
@@ -330,7 +330,7 @@ dotenv -x .env
 ./script/start-vm.sh 
 
 where: 
-- <RAW_FEDORA_FILE>: Fedora CoreOS raw image for applehv & aarch64
+- <IMAGE_PATH>: Fedora CoreOS raw image for applehv & aarch64
 - <IGNITION>: true
 - <VM_MEMORY>: 4096
 - <VM_CPU>: 2
