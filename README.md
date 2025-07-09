@@ -1,12 +1,18 @@
-# How to create a Fedora VM on a mac machine using vfkit
+# How to create VM on a mac machine using vfkit
 
-The purpose of this project is to help you to create a VM using either a Fedora Cloud image (or CoreOS) on your Mac machine with the help of the [vfkit](https://github.com/crc-org/vfkit) command-line tool able to communicate with the [macOS Virtualization framework](https://developer.apple.com/documentation/virtualization).
+The purpose of this project is to help you to create a VM on your Mac machine with the help of the [vfkit](https://github.com/crc-org/vfkit) command-line tool able to communicate with the [macOS Virtualization framework](https://developer.apple.com/documentation/virtualization).
 
-Install first the latest release of the tool (>= 0.6.1)
+The following VM have been successfully created:
+- Fedora Cloud
+- Fedora CoreOS
+- MacOS
+- Proxy the traffic to the VM using gvproxy to use as localhost
+
+To create a VM, the only requirement is to install the vfkit command-line tool (>= 0.6.1)
 ```shell
 brew install vfkit
 ```
-and download the Cloud image (or CoreOS) as documented hereafter
+Next, according to the VM that you would like to run, follow the instructions hereafter
 
 ## Cloud image and cloud-init
 
@@ -210,6 +216,26 @@ To ssh enable the `Remote Login` as documented https://osxdaily.com/2022/07/08/t
 ```shell
 ssh <mac_account>@<IP>
 ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null dabou@192.168.64.5
+❯ ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null dabou@192.168.64.5
+Warning: Permanently added '192.168.64.5' (ED25519) to the list of known hosts.
+(dabou@192.168.64.5) Password:
+Last login: Tue Jul  8 17:28:25 2025 from 192.168.64.1
+dabou@dabous-Virtual-Machine ~ % ls -la
+total 16
+drwxr-x---+ 14 dabou  staff   448 Jul  8 17:43 .
+drwxr-xr-x   5 root   admin   160 Jul  8 17:06 ..
+-r--------   1 dabou  staff     7 Jul  8 17:06 .CFUserTextEncoding
+drwx------+  2 dabou  staff    64 Jul  8 17:08 .Trash
+-rw-------   1 dabou  staff    39 Jul  8 17:28 .zsh_history
+drwx------   3 dabou  staff    96 Jul  8 17:09 .zsh_sessions
+drwx------+  3 dabou  staff    96 Jul  8 17:06 Desktop
+drwx------+  3 dabou  staff    96 Jul  8 17:06 Documents
+drwx------+  3 dabou  staff    96 Jul  8 17:06 Downloads
+drwx------@ 75 dabou  staff  2400 Jul  8 17:18 Library
+drwx------   3 dabou  staff    96 Jul  8 17:06 Movies
+drwx------+  3 dabou  staff    96 Jul  8 17:06 Music
+drwx------+  4 dabou  staff   128 Jul  8 17:06 Pictures
+drwxr-xr-x+  4 dabou  staff   128 Jul  8 17:06 Public
 ```
 
 ## CoreOS image
@@ -323,7 +349,7 @@ Last login: Fri Jan 10 13:14:45 2025 from 192.168.64.1
 dev@localhost:~$ 
 ```
 
-## gVisor
+## Proxy the traffic to use localhost with the help of gvproxy
 
 To ssh to the VM using `localhost` and without the need to be worry about the IP address assigned to the VM, it is needed to use the [gVisor](https://github.com/containers/gvisor-tap-vsock) tool, acting as proxy and been able `dynamically port forward` the packets.
 
