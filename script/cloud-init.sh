@@ -9,6 +9,15 @@ FEDORA_IMAGE_URL=https://download.fedoraproject.org/pub/fedora/linux/releases/43
 EXEC_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 FEDORA_DIR=$EXEC_DIR/../fedora
 
+if [[ -n "$SHARED_DIR" ]]; then
+    SHARED_DIR="$SHARED_DIR"
+fi
+
+
+if [[ -n "$M2_DIR" ]]; then
+    M2_DIR="$M2_DIR"
+fi
+
 OSTYPE=$(uname)
 
 get_host_timezone(){
@@ -55,7 +64,7 @@ create_user_data(){
     echo "#### 3. Create the user-data file"
     YOUR_SSH_KEY=$(cat ~/.ssh/id_rsa.pub)
     sed "s|SSH_PUBLIC_KEY|${YOUR_SSH_KEY}|g" ${FEDORA_DIR}/cloud-init/user-data.tpl > ${FEDORA_DIR}/cloud-init/user-data.tmp
-    sed -e "s|TIME_ZONE|$(get_host_timezone)|g" -e "s|GENPASSWORD|$(gen_password)|g" ${FEDORA_DIR}/cloud-init/user-data.tmp > ${FEDORA_DIR}/cloud-init/user-data
+    sed -e "s|TIME_ZONE|$(get_host_timezone)|g" -e "s|M2_DIR|$(echo ${M2_DIR} | awk -F/ '{print $NF}')|g" -e "s|SHARED_DIR|$(echo ${SHARED_DIR} | awk -F/ '{print $NF}')|g" -e "s|GENPASSWORD|$(gen_password)|g" ${FEDORA_DIR}/cloud-init/user-data.tmp > ${FEDORA_DIR}/cloud-init/user-data
     rm ${FEDORA_DIR}/cloud-init/user-data.tmp
 }
 

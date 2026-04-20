@@ -44,6 +44,12 @@ write_files:
       mkdir -p /home/dev/.local/bin
       chown -R dev:dev /home/dev/.local
 
+      mkdir /home/dev/SHARED_DIR
+      mkdir /home/dev/M2_DIR
+
+      sudo mount -t virtiofs SHARED_DIR /home/dev/SHARED_DIR
+      sudo mount -t virtiofs M2_DIR /home/dev/M2_DIR
+
       echo "Install dev tools needed by brew"
       sudo dnf group install -y development-tools
 

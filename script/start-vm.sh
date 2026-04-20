@@ -38,6 +38,11 @@ if [[ -n "$SHARED_DIR" ]]; then
     SHARED_DIR="$SHARED_DIR"
 fi
 
+
+if [[ -n "$M2_DIR" ]]; then
+    M2_DIR="$M2_DIR"
+fi
+
 VIRT_FOLDER=$(pwd)/_virt
 IMG_FOLDER=$(pwd)/fedora
 
@@ -63,5 +68,5 @@ vfkit \
   --device virtio-serial,logFilePath=$VIRT_FOLDER/default.log \
   --device virtio-gpu,width=800,height=600 \
   ${SHARED_DIR:+--device virtio-fs,sharedDir=$SHARED_DIR/,mountTag=dev} \
-  --device virtio-fs,sharedDir=$M2_DIR/,mountTag=m2} \
+  ${M2_DIR:+--device virtio-fs,sharedDir=$M2_DIR/,mountTag=m2} \
   --gui

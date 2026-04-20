@@ -58,13 +58,30 @@ runcmd:
   - [ sudo, -u, dev, "/run/scripts/install-script.sh" ]
 ```
 
-When you have finished to review and update the template file, execute the following script from a terminal to:
+When you have finished to review and update the template file, execute the following `cloud-init.sh` script from a terminal able to:
 - Fetch (optional) and decompress the Fedora Cloud image, 
 - Generate the crypted password for the `dev` user,
 - Import your local public key from the `~/.ssh/id_rsa.pub` file,
 - Generate the cloud-init `user-data` file
 
+Before to execute it, create a `env` variable file with the following variables:
+```shell
+touch .env
+echo "SHARED_DIR=</PATH/TO/SHARED_DIR>
+M2_DIR=</PATH/TO/.m2>
+" > .env
+dotenv -x .env
+
+where: 
+- <SHARED_DIR>: /path/to/dir/to/share/locally
+- <M2_DIR>: /path/to/maven/local/repository
+```
+
 ```bash
+// To backup the existing image and decompress the raw.xz file
+./script/cloud-init.sh
+
+// To fetch using wget the Fedora cloud raw.gz file before to decompress
 ./script/cloud-init.sh fetch
 ```
 
@@ -99,26 +116,25 @@ vfkit \
 --device virtio-gpu,width=800,height=600 \
 --gui
 ```
-or use the `start-vm.sh` bash script and set the following variables in an `.env` file:
-```shell
-touch .env
+
+Alternatively, you can use the `start-vm.sh` bash script where you set the following variables:
+```bash
 echo "IMAGE_PATH=Fedora-Cloud-43.raw
 VM_MEMORY=4096
 VM_CPU=2
 MAC_ADDRESS=<YOUR_INTERFACE_MAC_ADDRESS>
-SHARED_DIR=</PATH/TO/SHARED_DIR>
-M2_DIR=</PATH/TO/.m2>
-" > .env
+" >> .env
 dotenv -x .env
-
-./script/start-vm.sh 
 
 where: 
 - <IMAGE_PATH>: Fedora raw image
 - <VM_MEMORY>: Memory size of the VM: 4096
 - <VM_CPU>: Number of cpu: 2
-- <MAC_ADRESS>: The eth mac adddress
-- <SHARED_DIR>: /path/to/dir/to/share
+- <MAC_ADRESS>: The eth mac address
+```
+Run the script
+```shell
+./script/start-vm.sh 
 ```
 
 To ssh, get the IP address of the VM from the GUI screen (see screenshot) and pass your private key
@@ -157,7 +173,7 @@ mkdir /home/dev/<<TARGET_DIR>>
 sudo mount -t virtiofs <<MOUNT_NAME>> /home/dev/<<TARGET_DIR>>
 ls -la /home/dev/<<TARGET_DIR>>
 [dev@localhost ~]$ ls -la /home/dev/host_dir/
-total 20
+total 20m
 drwxr-xr-x 33 dev dev  1056 Jul  1 16:21 .
 drwxr-xr-x 42 dev dev  1344 Jul  8 05:33 ch007m
 drwxr-xr-x  5 dev dev   160 Dec 10  2024 cmoulliard
