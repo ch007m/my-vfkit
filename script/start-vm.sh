@@ -63,4 +63,5 @@ vfkit \
   --device virtio-serial,logFilePath=$VIRT_FOLDER/default.log \
   --device virtio-gpu,width=800,height=600 \
   ${SHARED_DIR:+--device virtio-fs,sharedDir=$SHARED_DIR/,mountTag=dev} \
+  --device virtio-fs,sharedDir=$M2_DIR/,mountTag=m2} \
   --gui
