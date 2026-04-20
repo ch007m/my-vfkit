@@ -41,25 +41,14 @@ write_files:
       sudo dnf group install -y development-tools
 
       echo 'Installing homebrew ...' | sudo tee /run/install_log.txt
-      CI=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/ZhongRuoyu/homebrew-aarch64-linux/HEAD/install.sh)"
+      CI=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
       echo >> /home/dev/.bashrc
-      echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/dev/.bashrc
-      eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-
-      echo 'Installing brew go from source as we must build it ...' | sudo tee /run/install_log.txt
-      brew install --build-from-source go
-
-      echo 'Installing kind and build it from source as non available for linux aarch64...' | sudo tee /run/install_log.txt
-      brew install --build-from-source kind
-      echo "export KIND_EXPERIMENTAL_FEATURE=podman" >> /home/dev/.bash_profile
+      echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv bash)"' >> /home/dev/.bashrc
+      eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv bash)"
 
       echo 'Installing k9s ...' | sudo tee /run/install_log.txt
       brew install derailed/k9s/k9s
-
-      echo 'Installing kubectl ...' | sudo tee /run/install_log.txt
-      sudo dnf install -y kubectl
-      echo 'alias k=kubectl' | sudo tee /etc/profile.d/alias.sh
 
       echo "$(hostname -I | cut -d" " -f 1) $HOSTNAME" | sudo tee /etc/hosts
 
@@ -117,6 +106,8 @@ echo "IMAGE_PATH=Fedora-Cloud-43.raw
 VM_MEMORY=4096
 VM_CPU=2
 MAC_ADDRESS=<YOUR_INTERFACE_MAC_ADDRESS>
+SHARED_DIR=</PATH/TO/SHARED_DIR>
+M2_DIR=</PATH/TO/.m2>
 " > .env
 dotenv -x .env
 
