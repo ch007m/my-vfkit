@@ -43,6 +43,8 @@ IMG_FOLDER=$(pwd)/fedora
 
 rm $VIRT_FOLDER/*.log
 
+#  --device virtio-fs,sharedDir=/Users/cmoullia/Documents/video,mountTag=video \
+#  --device virtio-fs,sharedDir=/Volumes/DABOU,mountTag=usb \
 vfkit \
   --cpus $CPU \
   --memory $MEMORY \

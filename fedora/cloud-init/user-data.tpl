@@ -45,11 +45,11 @@ write_files:
       sudo dnf group install -y development-tools
 
       echo 'Installing homebrew ...' | sudo tee /run/install_log.txt
-      CI=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/ZhongRuoyu/homebrew-aarch64-linux/HEAD/install.sh)"
+      CI=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
       echo >> /home/dev/.bashrc
-      echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/dev/.bashrc
-      eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+      echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv bash)"' >> /home/dev/.bashrc
+      eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv bash)"
 
       echo 'Installing brew go from source as we must build it ...' | sudo tee /run/install_log.txt
       brew install --build-from-source go

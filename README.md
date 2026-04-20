@@ -8,7 +8,7 @@ The following VM have been successfully created:
 - MacOS
 - Proxy the traffic to the VM using gvproxy to use as localhost
 
-To create a VM, the only requirement is to install the vfkit command-line tool (>= 0.6.1)
+To create a VM, the only requirement is to install the vfkit command-line tool (>= 0.6.3) and to have: podman
 ```shell
 brew install vfkit
 ```
@@ -16,9 +16,10 @@ Next, according to the VM that you would like to run, follow the instructions he
 
 ## Cloud image and cloud-init
 
-Download the compressed file matching your ARCH (x86 or ARM) and flavor `Fedora Cloud Base xx Raw` from the Fedora website: https://fedoraproject.org/cloud/download. 
+Download the compressed file matching your ARCH (x86 or ARM) and flavor `Fedora Cloud Base xx raw.xz` from the Fedora website: https://fedoraproject.org/cloud/download. 
 
-Create next a cloud-init configuration file which includes the username, password, ssh key, etc. An example of such a configuration file is provided part of this project and can be customized: `./fedora/cloud-init/user-data.tpl`
+Create next a cloud-init configuration file which includes the username, password, ssh key, etc. 
+An example of such a configuration file is provided part of this project and can be customized: `./fedora/cloud-init/user-data.tpl`
 
 You can define part of the section `packages:` the rpm that you would like to install using cloud-init. Nevertheless, when some additional steps are needed, it is then better
 to create using the tag [write_files:](https://docs.cloud-init.io/en/latest/reference/yaml_examples/write_files.html) a bash script that cloud-init will execute post VM created.
@@ -78,7 +79,7 @@ When you have finished to review and update the template file, execute the follo
 ./script/cloud-init.sh fetch
 ```
 
-When done, the folder `fedora/cloud-init/` will contain the generated `user-data` file and the image downloaded and uncompressed will be vailable under `./fedora/Fedora-cloud-<VERSION>.raw`.
+When done, the folder `fedora/cloud-init/` will contain the generated `user-data` file and the image downloaded and uncompressed will be available under `./fedora/Fedora-cloud-<VERSION>.raw`.
 
 Everything is in place to create using vfkit the VM except that to access the VM from your local machine, we must find the `mac address` of the eth or bridge interface that you plan to use to access the VM. 
 
@@ -87,7 +88,7 @@ You can get the MAC address of the interface within a terminal using the followi
 system_profiler SPNetworkDataType -json | jq -r '.SPNetworkDataType[] | select(.interface == "<<ETHERNET_INTERFACE>>") | .Ethernet."MAC Address"'
 ```
 
-When done, you can create the VM using the following command:
+When done, you will create the VM using the following command:
 ```shell
 export VIRT_FOLDER=/path/to/virt/dir
 
@@ -112,7 +113,7 @@ vfkit \
 or use the `start-vm.sh` bash script and set the following variables in an `.env` file:
 ```shell
 touch .env
-echo "IMAGE_PATH=Fedora-Cloud-42.raw
+echo "IMAGE_PATH=Fedora-Cloud-43.raw
 VM_MEMORY=4096
 VM_CPU=2
 MAC_ADDRESS=<YOUR_INTERFACE_MAC_ADDRESS>
@@ -157,11 +158,11 @@ by using the following parameter
 ```
 and ssh to mount the dir
 ```bash
-ssh -i ~/.ssh/id_rsa user1@192.168.64.5
-user1@localhost:~$ pwd
+ssh -i ~/.ssh/id_rsa dev@192.168.64.5
+dev@localhost:~$ pwd
 /home/dev
 
-mkdir /home/dev/host_dir
+mkdir /home/dev/<<TARGET_DIR>>
 sudo mount -t virtiofs <<MOUNT_NAME>> /home/dev/<<TARGET_DIR>>
 ls -la /home/dev/<<TARGET_DIR>>
 [dev@localhost ~]$ ls -la /home/dev/host_dir/

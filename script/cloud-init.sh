@@ -2,9 +2,9 @@
 
 set -e
 
-FEDORA_IMAGE_URL=https://download.fedoraproject.org/pub/fedora/linux/releases/42/Cloud/aarch64/images/Fedora-Cloud-Base-AmazonEC2-42-1.1.aarch64.raw.xz
-FEDORA_FILE_NAME=Fedora-Cloud-Base-AmazonEC2-42-1.1.aarch64.raw.xz
-FEDORA_VERSION=42
+FEDORA_VERSION=43
+FEDORA_FILE_NAME=Fedora-Cloud-Base-AmazonEC2-$FEDORA_VERSION-1.6
+FEDORA_IMAGE_URL=https://download.fedoraproject.org/pub/fedora/linux/releases/43/Cloud/aarch64/images/$FEDORA_FILE_NAME.aarch64.raw.xz
 
 EXEC_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 FEDORA_DIR=$EXEC_DIR/../fedora
