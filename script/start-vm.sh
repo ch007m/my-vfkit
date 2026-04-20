@@ -36,11 +36,13 @@ fi
 
 if [[ -n "$SHARED_DIR" ]]; then
     SHARED_DIR="$SHARED_DIR"
+    SHARED_MOUNT_TAG=$(echo ${SHARED_DIR} | awk -F/ '{print $NF}')
 fi
 
 
 if [[ -n "$M2_DIR" ]]; then
     M2_DIR="$M2_DIR"
+    M2_MOUNT_TAG=$(echo ${M2_DIR} | awk -F/ '{print $NF}')
 fi
 
 VIRT_FOLDER=$(pwd)/_virt
@@ -67,6 +69,6 @@ vfkit \
   --device virtio-vsock,port=1025,socketURL=$VIRT_FOLDER/default.sock,listen \
   --device virtio-serial,logFilePath=$VIRT_FOLDER/default.log \
   --device virtio-gpu,width=800,height=600 \
-  ${SHARED_DIR:+--device virtio-fs,sharedDir=$SHARED_DIR/,mountTag=dev} \
-  ${M2_DIR:+--device virtio-fs,sharedDir=$M2_DIR/,mountTag=m2} \
+  ${SHARED_DIR:+--device virtio-fs,sharedDir=$SHARED_DIR/,mountTag=$SHARED_MOUNT_TAG} \
+  ${M2_DIR:+--device virtio-fs,sharedDir=$M2_DIR/,mountTag=$M2_MOUNT_TAG} \
   --gui
