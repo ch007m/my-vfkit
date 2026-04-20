@@ -158,6 +158,12 @@ Script executed successfully!
 Cloud-init v. 24.2 finished at Tue, 08 Jul 2025 07:46:23 +0000. Datasource DataSourceNoCloud [seed=/dev/vdb][dsmode=net].  Up 27.97 seconds
 ```
 
+If the size of the disk is not enough, increase it using qemu-img, truncate before to create the VM from the RAW image
+```shell
+truncate -s +20G fedora/Fedora-Cloud-43.raw
+qemu-img resize -f raw fedora/Fedora-Cloud-43.raw +20G
+```
+
 You can also mount folders from your host machine as documented here: https://github.com/crc-org/vfkit/blob/main/doc/usage.md#file-sharing
 by using the following parameter 
 ```shell
