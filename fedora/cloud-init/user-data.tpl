@@ -24,7 +24,7 @@ users:
     gecos: Dev user
     # Password: dev
     passwd: GENPASSWORD
-    lock-passwd: false
+    lock_passwd: false
     sudo: ALL=(ALL) NOPASSWD:ALL
     ssh_authorized_keys:
       - SSH_PUBLIC_KEY
